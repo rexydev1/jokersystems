@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOKER - Premium Access Giriş</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0a0b10;
+        }
+
+        .login-box {
+            width: 440px;
+            background: rgba(22, 27, 44, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 28px;
+            padding: 3.5rem 3rem;
+            text-align: center;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
+        }
+
+        .login-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.2rem;
+            color: white;
+            box-shadow: 0 15px 30px rgba(126, 34, 206, 0.3);
+        }
+
+        .login-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 2px;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+        }
+
+        .login-subtitle {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            background: rgba(13, 17, 28, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 1.1rem;
+            color: white;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-group input:focus {
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.05);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1.1rem;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(90deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(124, 58, 237, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .footer-note {
+            margin-top: 2.5rem;
+            font-size: 0.7rem;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-box">
+        <div class="login-icon">🛡️</div>
+        <div class="login-logo">JOKER</div>
+        <div class="login-subtitle">Premium Access</div>
+
+        <form method="POST" action="/login">
+            <div class="input-group">
+                <label>Kullanıcı Adı</label>
+                <input type="text" name="username" placeholder="Kullanıcı adınızı girin..." required autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label>Şifre</label>
+                <input type="password" name="password" placeholder="Şifrenizi girin..." required autocomplete="off">
+            </div>
+
+            {% if error %}
+            <p style="color: #ef4444; font-size: 0.85rem; margin-bottom: 1.5rem; font-weight: 500;">{{ error }}</p>
+            {% endif %}
+
+            <button type="submit" class="login-btn">Giriş Yap</button>
+        </form>
+
+        <p class="footer-note">© 2026 JOKER PLATFORM • TÜM HAKLARI SAKLIDIR</p>
+    </div>
+</body>
+
+</html>

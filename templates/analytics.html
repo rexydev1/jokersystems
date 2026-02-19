@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="analytics-container" style="max-width: 1200px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <h1 style="font-size: 2.5rem; font-weight: 800; color: white;">Sistem İstatistikleri</h1>
+        <p style="color: var(--text-muted);">JOKER PLATFORMU GERÇEK ZAMANLI VERİ ANALİZİ</p>
+    </div>
+
+    <!-- Üst İstatistikler -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+        <div class="joker-card stat-card">
+            <span class="stat-label">TOPLAM VERİ</span>
+            <span class="stat-value">22M</span>
+            <span class="stat-trend">Veritabanı aktif</span>
+        </div>
+        <div class="joker-card stat-card">
+            <span class="stat-label">AKTİF SORGULAR</span>
+            <span class="stat-value">2.75M</span>
+            <span class="stat-trend">Anlık işlemler</span>
+        </div>
+        <div class="joker-card stat-card">
+            <span class="stat-label">SİSTEM KAYNAĞI</span>
+            <span class="stat-value">187M</span>
+            <span class="stat-trend">Senkronize klasör</span>
+        </div>
+        <div class="joker-card stat-card">
+            <span class="stat-label">CRAFTRİSE RECORDS</span>
+            <span class="stat-value">3M</span>
+            <span class="stat-trend">Global kayıtlı</span>
+        </div>
+    </div>
+
+    <!-- Grafik Alanları (Mockup Tasarım) -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <div class="joker-card" style="padding: 2rem;">
+            <h3>Veri Dağılımı</h3>
+            <div
+                style="height: 250px; background: rgba(0,0,0,0.2); border-radius: 50%; width: 250px; margin: 2rem auto; border: 15px solid var(--accent-color); border-top-color: #ef4444; border-right-color: #f59e0b; position: relative;">
+                <div
+                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                    <span style="display: block; font-size: 1.5rem; font-weight: 800;">74%</span>
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">SORGULAMA</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="joker-card" style="padding: 2rem;">
+            <h3>Sistem Performansı</h3>
+            <div style="height: 250px; display: flex; align-items: flex-end; gap: 1rem; padding-top: 2rem;">
+                <div style="flex: 1; height: 40%; background: var(--accent-gradient); border-radius: 8px 8px 0 0;">
+                </div>
+                <div style="flex: 1; height: 80%; background: var(--accent-gradient); border-radius: 8px 8px 0 0;">
+                </div>
+                <div style="flex: 1; height: 60%; background: var(--accent-gradient); border-radius: 8px 8px 0 0;">
+                </div>
+                <div style="flex: 1; height: 95%; background: var(--accent-gradient); border-radius: 8px 8px 0 0;">
+                </div>
+                <div style="flex: 1; height: 75%; background: var(--accent-gradient); border-radius: 8px 8px 0 0;">
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.8rem;">Haftalık İşlem
+                Hacmi</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .stat-card {
+        padding: 1.5rem;
+        text-align: center;
+        border-color: rgba(142, 45, 226, 0.2);
+    }
+
+    .stat-label {
+        display: block;
+        font-size: 0.65rem;
+        color: var(--text-muted);
+        letter-spacing: 2px;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+        display: block;
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-trend {
+        font-size: 0.7rem;
+        color: #10b981;
+    }
+</style>
+{% endblock %}

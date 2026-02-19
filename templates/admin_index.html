@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="joker-card"
+    style="max-width: 1000px; margin: 0 auto; cursor: default; border-color: rgba(220, 38, 38, 0.3);">
+    <div class="card-header">
+        <div class="card-icon" style="background: rgba(220, 38, 38, 0.1); border-color: #dc2626;">🛡️</div>
+        <h2 style="margin-left: 1rem; color: #dc2626;">JOKER ADMİN PANELİ</h2>
+        <div class="status-badge" style="color: #ef4444;">
+            <div class="status-dot" style="background: #ef4444; box-shadow: 0 0 10px #ef4444;"></div> Yönetici Modu
+        </div>
+    </div>
+
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">Ana yönetim paneline hoş geldiniz. Buradan sistem
+        operasyonlarını yönetebilirsiniz.</p>
+
+    <div class="grid-container" style="margin-top: 2rem;">
+        <div class="joker-card" style="padding: 1.5rem; background: rgba(0,0,0,0.3);">
+            <h3>Sistem Durumu</h3>
+            <p style="font-size: 2rem; color: #ef4444; font-weight: 800;">AKTİF</p>
+            <span style="color: var(--text-muted); font-size: 0.8rem;">Tüm arama motorları çalışıyor.</span>
+        </div>
+
+        <div class="joker-card" style="padding: 1.5rem; background: rgba(0,0,0,0.3);">
+            <h3>Site Ayarları</h3>
+            <p>Markalama ve izinleri özelleştirin.</p>
+            <button class="primary-btn" style="background: #dc2626; margin-top: 1rem;">Ana Sayfayı Düzenle</button>
+        </div>
+
+        <div class="joker-card" style="padding: 1.5rem; background: rgba(0,0,0,0.3);">
+            <h3>Yönetici Araçları</h3>
+            <p>Doğrudan veritabanı erişimi ve loglar.</p>
+            <a href="/admin/logout" class="primary-btn"
+                style="background: #450a0a; margin-top: 1rem; text-decoration: none; display: block; text-align: center;">Güvenli
+                Çıkış</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="joker-card" style="max-width: 800px; margin: 0 auto; cursor: default;">
+    <div class="card-header">
+        <div class="card-icon">{{ icon }}</div>
+        <h2 style="margin-left: 1rem; color: white;">{{ title }}</h2>
+    </div>
+
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">{{ description }}</p>
+
+    <div class="form-group">
+        <label>ARAMA PARAMETRESİ</label>
+        <div style="display: flex; gap: 1rem;">
+            <input type="text" id="search-input" placeholder="{{ placeholder }}" style="flex: 1;">
+            <button id="search-btn" class="primary-btn" style="width: auto; padding: 0 2rem;">Sorgula</button>
+        </div>
+    </div>
+
+    <div id="loader" style="display: none; text-align: center; padding: 2rem;">
+        <div
+            style="width: 30px; height: 30px; border: 3px solid rgba(142, 45, 226, 0.3); border-top-color: var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;">
+        </div>
+        <p style="margin-top: 1rem; color: var(--accent-color); font-weight: 600;">VERİTABANINDA ARANIYOR...</p>
+    </div>
+
+    <div id="results-container" style="display: none;">
+        <div class="card-footer" style="border-top: none; margin-bottom: 1rem;">
+            <span id="result-count" style="color: var(--accent-color); font-weight: bold;">0 eşleşme bulundu</span>
+        </div>
+        <div id="results-list"></div>
+    </div>
+</div>
+
+<style>
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+<script>
+    const searchInput = document.getElementById('search-input');
+    const searchBtn = document.getElementById('search-btn');
+    const loader = document.getElementById('loader');
+    const resultsContainer = document.getElementById('results-container');
+    const resultsList = document.getElementById('results-list');
+    const resultCountLabel = document.getElementById('result-count');
+
+    async function performSearch() {
+        const query = searchInput.value.trim();
+        if (!query) return;
+
+        // UI Reset
+        loader.style.display = 'block';
+        resultsContainer.style.display = 'none';
+        resultsList.innerHTML = '';
+
+        try {
+            // Eğer api_endpoint tam bir URL değilse (başında http yoksa), yerel sunucu kullanılıyordur.
+            // GitHub'a yüklendiğinde buraya kendi sunucu IP/adresinizi eklemelisiniz.
+            const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? ''
+                : 'http://SUNUCU_IP_ADRESINIZ:5000'; // Burayı kendi IP adresinizle değiştirin
+
+            const fullUrl = baseUrl + '{{ api_endpoint }}';
+
+            const response = await fetch(fullUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: query })
+            });
+
+            const data = await response.json();
+
+            loader.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            resultCountLabel.textContent = `${data.count} eşleşme bulundu`;
+
+            if (data.results.length > 0) {
+                data.results.forEach(result => {
+                    const div = document.createElement('div');
+                    div.className = 'result-item';
+                    div.textContent = result;
+                    resultsList.appendChild(div);
+                });
+            } else {
+                resultsList.innerHTML = '<div class="result-item" style="text-align:center; border:none;">Aramanızla eşleşen hiçbir kayıt bulunamadı.</div>';
+            }
+        } catch (error) {
+            console.error('Search error:', error);
+            loader.style.display = 'none';
+            alert('Sorgu hatası. Lütfen sunucu bağlantısını kontrol edin.');
+        }
+    }
+
+    searchBtn.addEventListener('click', performSearch);
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') performSearch();
+    });
+</script>
+{% endblock %}

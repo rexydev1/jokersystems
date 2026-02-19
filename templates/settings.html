@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="joker-card" style="max-width: 600px; margin: 0 auto; cursor: default;">
+    <div class="card-header">
+        <div class="card-icon">⚙️</div>
+        <h2 style="margin-left: 1rem; color: white;">Sistem Ayarları</h2>
+    </div>
+
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">Platform kimlik bilgilerinizi ve sistem token'larını
+        yönetin.</p>
+
+    <form method="POST" action="/settings">
+        <div class="form-group">
+            <label>DISCORD BOT TOKEN</label>
+            <input type="password" name="token" value="{{ token }}" placeholder="Token'ınızı buraya girin...">
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Token, güvenlik için yerel
+                <code>.env</code> dosyasında saklanır.</p>
+        </div>
+
+        <button type="submit" class="primary-btn">Yapılandırmayı Kaydet</button>
+    </form>
+</div>
+{% endblock %}

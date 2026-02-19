@@ -1,0 +1,23 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Large Data Folders (Exclude from GitHub)
+data/
+plaka/
+craftrise/
+discord/
+cc/
+kimlik/
+
+# OS generated files
+.DS_Store
+Thumbs.db

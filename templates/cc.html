@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="joker-card" style="max-width: 600px; margin: 0 auto; cursor: default;">
+    <div class="card-header">
+        <div class="card-icon">💳</div>
+        <h2 style="margin-left: 1rem; color: white;">CC Üretici</h2>
+    </div>
+
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">CC veritabanından rastgele bir kayıt seçin.</p>
+
+    <form method="POST" action="/cc">
+        <button type="submit" class="primary-btn">Rastgele CC Getir</button>
+    </form>
+
+    {% if cc %}
+    <div class="results-area" style="margin-top: 2rem;">
+        <label>OLUŞTURULAN SONUÇ</label>
+        <div class="result-item"
+            style="font-size: 1.5rem; text-align: center; color: var(--accent-color); font-weight: bold; padding: 2rem;">
+            {{ cc }}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div
+        style="margin-top: 1.5rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); border-radius: 10px; text-align: center; color: var(--danger);">
+        {{ error }}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

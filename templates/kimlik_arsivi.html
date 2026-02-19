@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="joker-card" style="max-width: 1200px; margin: 0 auto; cursor: default;">
+    <div class="card-header">
+        <div class="card-icon">🪪</div>
+        <h2 style="margin-left: 1rem; color: white;">Kimlik Arşivi</h2>
+    </div>
+
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">130'dan fazla yüksek kalitede kimlik kartı görseline
+        erişin. Güvenlik nedeniyle indirme ve sağ tık devre dışıdır.</p>
+
+    <div class="kimlik-gallery" oncontextmenu="return false;">
+        {% if kimlikler %}
+        <div class="kimlik-grid">
+            {% for kimlik in kimlikler %}
+            <div class="kimlik-item">
+                <img src="{{ url_for('get_kimlik', filename=kimlik) }}" alt="Kimlik">
+                <div class="kimlik-overlay"></div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div
+            style="text-align: center; padding: 4rem; background: rgba(0,0,0,0.2); border-radius: 20px; border: 1px dashed rgba(255,255,255,0.1);">
+            <p style="color: var(--text-muted);">Klasörde henüz hiç kimlik görseli yok.</p>
+            <p style="font-size: 0.8rem; color: #64748b;">Görsellerinizi ana dizindeki <code>kimlik/</code> klasörüne
+                atarak burada görüntüleyebilirsiniz.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    /* Ekstra Güvenlik */
+    body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .kimlik-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .kimlik-item {
+        position: relative;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.2);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .kimlik-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+        -webkit-user-drag: none;
+        transition: transform 0.5s ease;
+    }
+
+    .kimlik-item:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        border-color: rgba(168, 85, 247, 0.5);
+    }
+
+    .kimlik-item:hover img {
+        transform: scale(1.1);
+    }
+
+    /* Görsel indirmeyi engellemek için görünmez katman */
+    .kimlik-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        z-index: 10;
+    }
+</style>
+
+<script>
+    // Klavye kısayollarını engelle (CTRL+S, CTRL+U, F12 vb.)
+    document.addEventListener('keydown', function (e) {
+        if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'p')) {
+            e.preventDefault();
+        }
+        if (e.key === 'F12') {
+            e.preventDefault();
+        }
+    });
+</script>
+{% endblock %}

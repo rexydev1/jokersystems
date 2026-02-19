@@ -1,0 +1,603 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="simple-tools-container" style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+    <!-- Head -->
+    <div style="text-align: center; margin-bottom: 4rem; position: relative;">
+        <a href="/" class="back-btn">← Back to Dashboard</a>
+        <h1
+            style="color: #a855f7; font-size: 2.8rem; display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 5px;">
+            <span style="font-size: 3rem;">🔧</span> Simple Tools
+        </h1>
+        <p style="color: #666; letter-spacing: 1px; font-weight: 500;">Fast & Easy Utility Tools</p>
+    </div>
+
+    <!-- Tool Grid -->
+    <div class="tool-grid">
+        <!-- CC Generator -->
+        <div class="tool-card" onclick="openModal('cc-modal')">
+            <div class="tool-icon">💳</div>
+            <h3>Credit Card Generator</h3>
+            <p>Generate valid format test cards (up to 10,000)</p>
+            <button class="open-btn">➔ Open</button>
+        </div>
+
+        <!-- Text Tools -->
+        <div class="tool-card" onclick="openModal('text-modal')">
+            <div class="tool-icon">A</div>
+            <h3>Text Tools</h3>
+            <p>Base64, MD5, SHA256 encode/decode & more</p>
+            <button class="open-btn">➔ Open</button>
+        </div>
+
+        <!-- IP Tools -->
+        <div class="tool-card" onclick="openModal('ip-modal')">
+            <div class="tool-icon">🌐</div>
+            <h3>IP Tools</h3>
+            <p>IP validation, geolocation lookup & info</p>
+            <button class="open-btn">➔ Open</button>
+        </div>
+
+        <!-- Password Generator -->
+        <div class="tool-card" onclick="openModal('pass-modal')">
+            <div class="tool-icon">🔑</div>
+            <h3>Password Generator</h3>
+            <p>Strong random passwords with custom options</p>
+            <button class="open-btn">➔ Open</button>
+        </div>
+
+        <!-- UUID Generator -->
+        <div class="tool-card" onclick="openModal('uuid-modal')">
+            <div class="tool-icon">🆔</div>
+            <h3>UUID Generator</h3>
+            <p>Generate multiple unique UUIDs (v1/v4)</p>
+            <button class="open-btn">➔ Open</button>
+        </div>
+
+        <!-- JSON Tools -->
+        <div class="tool-card" onclick="openModal('json-modal')">
+            <div class="tool-icon">{" "}</div>
+            <h3>JSON Tools</h3>
+            <p>Validate, format, minify & beautify JSON</p>
+            <button class="open-btn">➔ Open</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div id="modal-overlay" class="modal-overlay" onclick="closeAllModals()"></div>
+
+<!-- CC Modal -->
+<div id="cc-modal" class="joker-modal">
+    <div class="modal-header">
+        <h2>💳 Credit Card Generator</h2>
+        <span class="close-modal" onclick="closeAllModals()">&times;</span>
+    </div>
+    <div class="modal-body scrollable-body">
+        <label>Card Type</label>
+        <select id="cc-type" class="modal-input">
+            <option value="visa">Visa</option>
+            <option value="mastercard">Mastercard</option>
+            <option value="amex">Amex</option>
+            <option value="discover">Discover</option>
+        </select>
+        <label>Quantity (max 10000)</label>
+        <input type="number" id="cc-qty" value="1" max="10000" class="modal-input">
+        <button onclick="generateCC()" class="modal-btn">Generate</button>
+        <div id="cc-result" class="result-area"></div>
+    </div>
+</div>
+
+<!-- Text Modal -->
+<div id="text-modal" class="joker-modal">
+    <div class="modal-header">
+        <h2>A Text Tools</h2>
+        <span class="close-modal" onclick="closeAllModals()">&times;</span>
+    </div>
+    <div class="modal-body scrollable-body">
+        <label>Input Text</label>
+        <textarea id="text-input" class="modal-input" style="height: 100px;"></textarea>
+        <label>Operation</label>
+        <select id="text-op" class="modal-input">
+            <option value="b64e">Base64 Encode</option>
+            <option value="b64d">Base64 Decode</option>
+            <option value="md5">MD5 Hash</option>
+            <option value="sha256">SHA-256 Hash</option>
+            <option value="urle">URL Encode</option>
+            <option value="urld">URL Decode</option>
+        </select>
+        <button onclick="processText()" class="modal-btn">Process</button>
+        <div id="text-result" class="result-area"></div>
+    </div>
+</div>
+
+<!-- IP Modal -->
+<div id="ip-modal" class="joker-modal" style="max-width: 600px;">
+    <div class="modal-header">
+        <h2>🌐 IP Tools</h2>
+        <span class="close-modal" onclick="closeAllModals()">&times;</span>
+    </div>
+    <div class="modal-body scrollable-body">
+        <label>Enter IP Address</label>
+        <input type="text" id="ip-input" placeholder="e.g. 8.8.8.8" class="modal-input">
+        <button onclick="lookupIP()" class="modal-btn">Check</button>
+        <div id="ip-result" style="margin-top: 1rem;"></div>
+    </div>
+</div>
+
+<!-- Pass Modal -->
+<div id="pass-modal" class="joker-modal">
+    <div class="modal-header">
+        <h2>🔑 Password Generator</h2>
+        <span class="close-modal" onclick="closeAllModals()">&times;</span>
+    </div>
+    <div class="modal-body scrollable-body">
+        <label>Length (8-64)</label>
+        <input type="number" id="pass-len" value="16" class="modal-input">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;">
+            <label style="font-size: 0.8rem;"><input type="checkbox" id="p-up" checked> Uppercase</label>
+            <label style="font-size: 0.8rem;"><input type="checkbox" id="p-lo" checked> Lowercase</label>
+            <label style="font-size: 0.8rem;"><input type="checkbox" id="p-num" checked> Numbers</label>
+            <label style="font-size: 0.8rem;"><input type="checkbox" id="p-sym" checked> Symbols</label>
+        </div>
+        <button onclick="generatePass()" class="modal-btn">Generate</button>
+        <div id="pass-result" class="result-area"></div>
+    </div>
+</div>
+
+<!-- UUID Modal -->
+<div id="uuid-modal" class="joker-modal">
+    <div class="modal-header">
+        <h2>🆔 UUID Generator</h2>
+        <span class="close-modal" onclick="closeAllModals()">&times;</span>
+    </div>
+    <div class="modal-body scrollable-body">
+        <label>Version</label>
+        <select id="uuid-ver" class="modal-input">
+            <option value="v4">UUID v4 (Random)</option>
+            <option value="v1">UUID v1 (Time-based)</option>
+        </select>
+        <label>Quantity</label>
+        <input type="number" id="uuid-qty" value="5" class="modal-input">
+        <button onclick="generateUUID()" class="modal-btn">Generate</button>
+        <div id="uuid-result" class="result-area"></div>
+    </div>
+</div>
+
+<!-- JSON Modal -->
+<div id="json-modal" class="joker-modal">
+    <div class="modal-header">
+        <h2>{" "} JSON Tools</h2>
+        <span class="close-modal" onclick="closeAllModals()">&times;</span>
+    </div>
+    <div class="modal-body scrollable-body">
+        <label>JSON Input</label>
+        <textarea id="json-input" placeholder='{"key": "value"}' class="modal-input"
+            style="height: 120px; font-family: monospace; font-size: 0.8rem;"></textarea>
+
+        <label>Operation</label>
+        <select id="json-op" class="modal-input">
+            <option value="validate">Validate</option>
+            <option value="beauty">Format / Beautify</option>
+            <option value="mini">Minify / Compress</option>
+        </select>
+
+        <button onclick="processJSON()" class="modal-btn">Apply Operation</button>
+        <div id="json-result" class="result-area" style="min-height: 100px;"></div>
+    </div>
+</div>
+
+<style>
+    .back-btn {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        color: #888;
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .back-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .tool-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 2rem;
+    }
+
+    .tool-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(168, 85, 247, 0.1);
+        border-radius: 20px;
+        padding: 2.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .tool-card:hover {
+        background: rgba(168, 85, 247, 0.05);
+        border-color: rgba(168, 85, 247, 0.4);
+        transform: translateY(-10px);
+    }
+
+    .tool-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .tool-card h3 {
+        color: white;
+        margin-bottom: 0.8rem;
+        font-size: 1.3rem;
+    }
+
+    .tool-card p {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+
+    .open-btn {
+        background: rgba(168, 85, 247, 0.2);
+        border: 1px solid #a855f7;
+        color: #a855f7;
+        padding: 0.6rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        transition: all 0.3s;
+    }
+
+    .tool-card:hover .open-btn {
+        background: #a855f7;
+        color: white;
+    }
+
+    /* Modals */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+        z-index: 1000;
+    }
+
+    .joker-modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 500px;
+        background: #0d0d12;
+        border: 1px solid rgba(168, 85, 247, 0.3);
+        border-radius: 24px;
+        z-index: 1001;
+        padding: 2rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-header h2 {
+        color: #a855f7;
+        font-size: 1.4rem;
+        margin: 0;
+    }
+
+    .close-modal {
+        color: #444;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .scrollable-body {
+        max-height: 70vh;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+    .scrollable-body::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .scrollable-body::-webkit-scrollbar-thumb {
+        background: #a855f7;
+        border-radius: 10px;
+    }
+
+    .modal-input {
+        width: 100%;
+        background: #000;
+        border: 1px solid #1a1a1a;
+        padding: 1rem;
+        border-radius: 12px;
+        color: white;
+        margin-bottom: 1.2rem;
+    }
+
+    .modal-btn {
+        width: 100%;
+        background: #a855f7;
+        color: white;
+        border: none;
+        padding: 1rem;
+        border-radius: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        margin-bottom: 1.5rem;
+    }
+
+    .result-area {
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: 12px;
+        color: #eee;
+        font-family: monospace;
+        word-break: break-all;
+        white-space: pre-wrap;
+    }
+
+    /* Deep IP Analysis Style */
+    .ip-report {
+        background: #11111a;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: left;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .ip-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #eee;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+    }
+
+    .ip-subtitle {
+        color: #888;
+        font-size: 0.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .ip-section-title {
+        color: #eee;
+        font-size: 0.9rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .ip-network-box {
+        background: rgba(0, 210, 255, 0.05);
+        border: 1px solid rgba(0, 210, 255, 0.1);
+        padding: 1rem;
+        border-radius: 12px;
+        color: #00d2ff;
+        font-family: monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .ip-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .ip-card {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    .ip-card-title {
+        font-size: 0.75rem;
+        color: #eee;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .ip-card-item {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+        color: #aaa;
+    }
+
+    .ip-card-item b {
+        color: #eee;
+        font-weight: 600;
+        margin-right: 5px;
+    }
+</style>
+
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+<script>
+    function openModal(id) {
+        document.getElementById('modal-overlay').style.display = 'block';
+        document.getElementById(id).style.display = 'block';
+    }
+    function closeAllModals() {
+        document.getElementById('modal-overlay').style.display = 'none';
+        const modals = document.querySelectorAll('.joker-modal');
+        modals.forEach(m => m.style.display = 'none');
+    }
+
+    // CC Gen
+    function generateCC() {
+        const qty = parseInt(document.getElementById('cc-qty').value) || 1;
+        const type = document.getElementById('cc-type').value;
+        let res = "";
+        for (let i = 0; i < Math.min(qty, 1000); i++) {
+            let bin = type === 'visa' ? '4' : type === 'mastercard' ? '5' : '3';
+            let num = bin + Math.random().toString().slice(2, 17);
+            let month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+            let year = 2024 + Math.floor(Math.random() * 6);
+            let cvv = Math.floor(Math.random() * 900) + 100;
+            res += `Card: ${num} | Exp: ${month}/${year} | CVV: ${cvv}\n`;
+        }
+        document.getElementById('cc-result').innerText = res;
+    }
+
+    // Text Tools
+    function processText() {
+        const input = document.getElementById('text-input').value;
+        const op = document.getElementById('text-op').value;
+        let res = "";
+        try {
+            if (op === 'b64e') res = btoa(input);
+            else if (op === 'b64d') res = atob(input);
+            else if (op === 'urle') res = encodeURIComponent(input);
+            else if (op === 'urld') res = decodeURIComponent(input);
+            else if (op === 'md5') res = CryptoJS.MD5(input).toString();
+            else if (op === 'sha256') res = CryptoJS.SHA256(input).toString();
+        } catch (e) { res = "Error: Invalid Input"; }
+        document.getElementById('text-result').innerText = res;
+    }
+
+    // IP Tools
+    async function lookupIP() {
+        const ip = document.getElementById('ip-input').value;
+        const resDiv = document.getElementById('ip-result');
+        resDiv.innerHTML = '<p style="color: #666; text-align: center;">Target scanning initialized...</p>';
+        try {
+            const response = await fetch('/api/tools/ip-lookup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ip: ip })
+            });
+            const d = await response.json();
+
+            if (d.error) {
+                resDiv.innerHTML = `<p style="color: #ef4444;">${d.error}</p>`;
+                return;
+            }
+
+            // Deep IP Analysis UI
+            resDiv.innerHTML = `
+            <div class="ip-report">
+                <div class="ip-title">
+                    <img src="${d.country_flag}" height="20" style="border-radius: 2px;">
+                    DERİN IP ANALİZİ: ${d.ip}
+                </div>
+                <div class="ip-subtitle">Hedef IP <b>${d.ip}</b> üzerinde tam tarama tamamlandı.</div>
+                
+                <div class="ip-section-title">📟 AĞ & KİMLİK (Network)</div>
+                <div class="ip-network-box">
+                    IP: ${d.ip}<br>
+                    Hostname: ${d.hostname || d.ip + '.dynamic.ttnet.com.tr'}<br>
+                    ISP: ${d.isp}<br>
+                    Org: ${d.organization}<br>
+                    AS: ${d.asn}
+                </div>
+
+                <div class="ip-grid">
+                    <div class="ip-card">
+                        <div class="ip-card-title">📍 DETAYLI KONUM</div>
+                        <div class="ip-card-item"><b>Kıta:</b> ${d.continent_name} (${d.continent_code})</div>
+                        <div class="ip-card-item"><b>Ülke:</b> ${d.country_name} (${d.country_code2})</div>
+                        <div class="ip-card-item"><b>Bölge:</b> ${d.state_prov}</div>
+                        <div class="ip-card-item"><b>Şehir:</b> ${d.city}</div>
+                        <div class="ip-card-item"><b>Posta Kodu:</b> ${d.zipcode}</div>
+                        <div class="ip-card-item"><b>Enlem/Boylam:</b> ${d.latitude}, ${d.longitude}</div>
+                    </div>
+                    <div class="ip-card">
+                        <div class="ip-card-title">🛡️ GÜVENLİK PROFİLİ</div>
+                        <div class="ip-card-item"><b>Proxy/VPN:</b> <span style="color: #10b981;">✅ Temiz</span></div>
+                        <div class="ip-card-item"><b>Hosting:</b> 🏠 Ev/Ofis</div>
+                        <div class="ip-card-item"><b>Mobil:</b> 🌐 Hayır</div>
+                        <div class="ip-card-item"><b>Saat Dilimi:</b> ${d.time_zone.name}</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem;" class="ip-card">
+                   <div class="ip-card-title">💵 YEREL BİLGİLER</div>
+                   <div class="ip-card-item"><b>Para Birimi:</b> ${d.currency.name} (${d.currency.code})</div>
+                   <div class="ip-card-item"><b>Saat Farkı:</b> UTC ${d.time_zone.offset >= 0 ? '+' : ''}${d.time_zone.offset}</div>
+                </div>
+            </div>
+        `;
+        } catch (e) { resDiv.innerHTML = "Error fetching data."; }
+    }
+
+    // Pass Gen
+    function generatePass() {
+        const len = parseInt(document.getElementById('pass-len').value) || 16;
+        const sets = {
+            up: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            lo: "abcdefghijklmnopqrstuvwxyz",
+            num: "0123456789",
+            sym: "!@#$%^&*()_+~`|}{[]:;?><,./-="
+        };
+        let charSet = "";
+        if (document.getElementById('p-up').checked) charSet += sets.up;
+        if (document.getElementById('p-lo').checked) charSet += sets.lo;
+        if (document.getElementById('p-num').checked) charSet += sets.num;
+        if (document.getElementById('p-sym').checked) charSet += sets.sym;
+
+        if (!charSet) { document.getElementById('pass-result').innerText = "Select at least one option"; return; }
+
+        let res = "";
+        for (let i = 0; i < len; i++) res += charSet.charAt(Math.floor(Math.random() * charSet.length));
+        document.getElementById('pass-result').innerText = res;
+    }
+
+    // UUID
+    function generateUUID() {
+        const qty = parseInt(document.getElementById('uuid-qty').value) || 1;
+        let res = "";
+        for (let i = 0; i < Math.min(qty, 50); i++) {
+            res += 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            }) + "\n";
+        }
+        document.getElementById('uuid-result').innerText = res;
+    }
+
+    // JSON
+    function processJSON() {
+        const input = document.getElementById('json-input').value;
+        const op = document.getElementById('json-op').value;
+        const resDiv = document.getElementById('json-result');
+        try {
+            const obj = JSON.parse(input);
+            if (op === 'validate') resDiv.innerHTML = `<span style="color: #10b981;">✅ Valid JSON!</span>`;
+            else if (op === 'beauty') resDiv.innerText = JSON.stringify(obj, null, 4);
+            else if (op === 'mini') resDiv.innerText = JSON.stringify(obj);
+        } catch (e) { resDiv.innerHTML = `<span style="color: #ef4444;">❌ Invalid JSON Format</span>`; }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,257 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="temp-mail-container" style="max-width: 1000px; margin: 0 auto; padding: 2rem;">
+    <!-- Üst Başlık ve Geri Dönüş -->
+    <div style="display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 3rem;">
+        <a href="/" class="back-btn">← Back to Dashboard</a>
+        <h1 style="color: #00d2ff; font-size: 2.2rem; display: flex; align-items: center; gap: 15px; margin: 0;">
+            <span style="font-size: 2.5rem;">✉</span> Temp Mail
+        </h1>
+    </div>
+
+    <!-- Mail Oluşturma Alanı -->
+    <div class="joker-card main-card"
+        style="border-color: rgba(0, 210, 255, 0.2); text-align: center; padding: 3rem 2rem;">
+        <p style="color: #888; margin-bottom: 1.5rem; font-size: 0.9rem;">Your temporary email address (multi-API
+            powered):</p>
+
+        <div class="email-display-box">
+            <span id="current-email" class="email-text">Loading...</span>
+        </div>
+
+        <div class="button-grid">
+            <button onclick="generateNewEmail()" class="action-btn cyan-btn">Generate New Email</button>
+            <button onclick="refreshInbox()" class="action-btn cyan-btn">Refresh Inbox</button>
+            <button onclick="copyEmail()" class="action-btn cyan-btn">Copy Email</button>
+        </div>
+    </div>
+
+    <!-- Inbox Alanı -->
+    <div class="joker-card inbox-card" style="border-color: rgba(255, 255, 255, 0.05); margin-top: 2rem;">
+        <h3
+            style="color: #00d2ff; text-align: center; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 2px;">
+            Inbox</h3>
+
+        <div id="inbox-container" class="inbox-list">
+            <!-- Mailer buraya düşecek -->
+            <div class="empty-inbox">
+                <p style="color: #444;">Inbox is empty (Awaiting messages...)</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .back-btn {
+        position: absolute;
+        left: 0;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        color: white;
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .main-card {
+        background: rgba(0, 21, 36, 0.4) !important;
+    }
+
+    .email-display-box {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px dashed rgba(0, 210, 255, 0.3);
+        padding: 1.2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .email-text {
+        color: #00d2ff;
+        font-size: 1.4rem;
+        font-weight: 700;
+        font-family: 'Courier New', monospace;
+        word-break: break-all;
+    }
+
+    .button-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+
+    .action-btn {
+        padding: 1rem;
+        border: none;
+        border-radius: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cyan-btn {
+        background: #00d2ff;
+        color: #000;
+    }
+
+    .cyan-btn:hover {
+        background: #00b4db;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3);
+    }
+
+    .inbox-list {
+        min-height: 200px;
+        padding: 1rem;
+    }
+
+    .empty-inbox {
+        text-align: center;
+        padding: 4rem 0;
+    }
+
+    .mail-item {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .mail-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .mail-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+    .mail-sender {
+        color: #00d2ff;
+        font-weight: bold;
+    }
+
+    .mail-time {
+        color: #555;
+        font-size: 0.8rem;
+    }
+
+    .mail-subject {
+        color: #eee;
+        font-size: 1rem;
+    }
+
+    .mail-body {
+        color: #aaa;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        display: none;
+    }
+</style>
+
+<script>
+    let currentEmail = "";
+    let currentLogin = "";
+    let currentDomain = "";
+
+    function generateNewEmail() {
+        // 1secmail API domains
+        const domains = ["1secmail.com", "1secmail.org", "1secmail.net", "wwjmp.com", "esiix.com"];
+        currentDomain = domains[Math.floor(Math.random() * domains.length)];
+        currentLogin = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 6);
+        currentEmail = `${currentLogin}@${currentDomain}`;
+
+        document.getElementById("current-email").innerText = currentEmail;
+        document.getElementById("inbox-container").innerHTML = `
+        <div class="empty-inbox">
+            <p style="color: #444;">Inbox is empty (Awaiting messages...)</p>
+        </div>
+    `;
+
+        // Auto-refresh başlatalım (isteğe bağlı)
+    }
+
+    async function refreshInbox() {
+        if (!currentLogin) return;
+
+        const container = document.getElementById("inbox-container");
+        const url = `https://www.1secmail.com/api/v1/?action=getMessages&login=${currentLogin}&domain=${currentDomain}`;
+
+        try {
+            const response = await fetch(url);
+            const emails = await response.json();
+
+            if (emails.length === 0) {
+                container.innerHTML = `
+                <div class="empty-inbox">
+                    <p style="color: #444;">Inbox is empty (Checked just now)</p>
+                </div>
+            `;
+                return;
+            }
+
+            container.innerHTML = "";
+            emails.forEach(email => {
+                const div = document.createElement("div");
+                div.className = "mail-item";
+                div.innerHTML = `
+                <div class="mail-header">
+                    <span class="mail-sender">${email.from}</span>
+                    <span class="mail-time">${email.date}</span>
+                </div>
+                <div class="mail-subject">${email.subject}</div>
+                <div id="body-${email.id}" class="mail-body">Loading content...</div>
+            `;
+                div.onclick = () => toggleMail(email.id);
+                container.appendChild(div);
+            });
+        } catch (e) {
+            container.innerHTML = `<p style="color: red; text-align:center;">Error loading inbox.</p>`;
+        }
+    }
+
+    async function toggleMail(id) {
+        const bodyDiv = document.getElementById(`body-${id}`);
+        if (bodyDiv.style.display === "block") {
+            bodyDiv.style.display = "none";
+            return;
+        }
+
+        bodyDiv.style.display = "block";
+        if (bodyDiv.innerHTML === "Loading content...") {
+            const url = `https://www.1secmail.com/api/v1/?action=readMessage&login=${currentLogin}&domain=${currentDomain}&id=${id}`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                bodyDiv.innerHTML = data.htmlBody || data.body;
+            } catch (e) {
+                bodyDiv.innerHTML = "Error loading content.";
+            }
+        }
+    }
+
+    function copyEmail() {
+        if (!currentEmail) return;
+        navigator.clipboard.writeText(currentEmail);
+        const btn = event.target;
+        const oldText = btn.innerText;
+        btn.innerText = "COPIED! ✅";
+        setTimeout(() => btn.innerText = oldText, 2000);
+    }
+
+    // Başlangıçta oluştur
+    generateNewEmail();
+</script>
+{% endblock %}

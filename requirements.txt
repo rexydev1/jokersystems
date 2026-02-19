@@ -1,0 +1,6 @@
+discord.py
+python-dotenv
+Flask
+Flask-Cors
+requests
+

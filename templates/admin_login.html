@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOKER - Admin Girişi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #050505;
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.05) 0%, transparent 50%);
+        }
+
+        .login-box {
+            width: 400px;
+            background: rgba(20, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+        }
+
+        .login-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #dc2626 0%, #7f1d1d 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+        }
+
+        .login-logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 2px;
+            margin-bottom: 0.25rem;
+        }
+
+        .login-subtitle {
+            font-size: 0.75rem;
+            color: #ef4444;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2.5rem;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #991b1b;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            color: white;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: #ef4444;
+            background: rgba(220, 38, 38, 0.05);
+            outline: none;
+        }
+
+        .admin-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #dc2626 0%, #7f1d1d 100%);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.4);
+        }
+
+        .footer-note {
+            margin-top: 2rem;
+            font-size: 0.65rem;
+            color: #7f1d1d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-box">
+        <div class="login-icon">🔒</div>
+        <div class="login-logo">YÖNETİCİ</div>
+        <div class="login-subtitle">Güvenli Erişim</div>
+
+        <form method="POST" action="/admin/login">
+            <div class="input-group">
+                <label>Admin Kullanıcı Adı</label>
+                <input type="text" name="username" placeholder="Kullanıcı adını girin..." required autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label>Admin Şifresi</label>
+                <input type="password" name="password" placeholder="Şifrenizi girin..." required autocomplete="off">
+            </div>
+
+            {% if error %}
+            <p style="color: #ef4444; font-size: 0.8rem; margin-bottom: 1rem;">{{ error }}</p>
+            {% endif %}
+
+            <button type="submit" class="admin-btn">Erişimi Doğrula</button>
+        </form>
+
+        <p class="footer-note">Yetkisiz erişimler kaydedilmektedir.</p>
+    </div>
+</body>
+
+</html>
