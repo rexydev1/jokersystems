@@ -121,7 +121,9 @@
         async function loadKimlikler() {
             const grid = document.getElementById('kimlik-grid');
             try {
-                const response = await fetch(`${baseUrl}/api/list-kimlik`);
+                const response = await fetch(`${baseUrl}/api/list-kimlik`, {
+                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                });
                 const testImages = await response.json();
 
                 grid.innerHTML = '';

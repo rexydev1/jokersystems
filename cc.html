@@ -80,7 +80,14 @@
             try {
                 // Not: Flask tarafında CC üreten bir API ucu eklemeniz gerekebilir.
                 // Eğer yoksa, arayüz sadece görsel olarak kalacaktır.
-                const response = await fetch(`${baseUrl}/api/search/cc-random`, { method: 'POST' });
+                const response = await fetch(`${baseUrl}/api/search/cc-random`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true'
+                    },
+                    body: JSON.stringify({})
+                });
                 const d = await response.json();
 
                 if (d.cc) {
