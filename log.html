@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOKER - Premium Platform</title>
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="icon" style="color: #a855f7;">🛡️</span> JOKER
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Ana Sayfa</a>
+                <a href="log.html" class="nav-link">Domain Sorgu</a>
+                <a href="plaka.html" class="nav-link">Plaka Sorgu</a>
+                <a href="craftrise.html" class="nav-link">CraftRise</a>
+                <a href="cc.html" class="nav-link">CC Üretici</a>
+                <a href="#" class="nav-link" style="color: var(--danger);">Çıkış</a>
+            </div>
+            <div class="user-profile"
+                style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.2);">
+                <div class="avatar" style="background: #a855f7;">J</div>
+                <div class="user-info" style="font-size: 0.8rem;">
+                    <span style="display: block; font-weight: bold; color: white;">Premium Kullanıcı</span>
+                    <span style="color: rgba(255,255,255,0.5);">rexy@joker.platform</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <div class="joker-card" style="max-width: 800px; margin: 0 auto; cursor: default;">
+            <div class="card-header">
+                <div class="card-icon">🌐</div>
+                <h2 style="margin-left: 1rem; color: white;">Domain Sorgu</h2>
+            </div>
+
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Data klasöründeki 2.8 milyardan fazla kayıt
+                arasında arama yapın.</p>
+
+            <div class="form-group">
+                <label>ARAMA PARAMETRESİ</label>
+                <div style="display: flex; gap: 1rem;">
+                    <input type="text" id="search-input" placeholder="Arama terimi girin..." style="flex: 1;">
+                    <button id="search-btn" class="primary-btn" style="width: auto; padding: 0 2rem;">Sorgula</button>
+                </div>
+            </div>
+
+            <div id="loader" style="display: none; text-align: center; padding: 2rem;">
+                <div
+                    style="width: 30px; height: 30px; border: 3px solid rgba(142, 45, 226, 0.3); border-top-color: var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;">
+                </div>
+                <p style="margin-top: 1rem; color: var(--accent-color); font-weight: 600;">VERİTABANINDA ARANIYOR...</p>
+            </div>
+
+            <div id="results-container" style="display: none;">
+                <div class="card-footer" style="border-top: none; margin-bottom: 1rem;">
+                    <span id="result-count" style="color: var(--accent-color); font-weight: bold;">0 eşleşme
+                        bulundu</span>
+                </div>
+                <div id="results-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const searchBtn = document.getElementById('search-btn');
+        const loader = document.getElementById('loader');
+        const resultsContainer = document.getElementById('results-container');
+        const resultsList = document.getElementById('results-list');
+        const resultCountLabel = document.getElementById('result-count');
+
+        async function performSearch() {
+            const query = searchInput.value.trim();
+            if (!query) return;
+
+            loader.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            resultsList.innerHTML = '';
+
+            try {
+                // Kendi IP/Ngrok adresinizi buraya yazın
+                const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? ''
+                    : 'http://SUNUCU_IP_ADRESINIZ:5000';
+
+                const fullUrl = baseUrl + '/api/search/log';
+
+                const response = await fetch(fullUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query })
+                });
+
+                const data = await response.json();
+
+                loader.style.display = 'none';
+                resultsContainer.style.display = 'block';
+                resultCountLabel.textContent = `${data.count} eşleşme bulundu`;
+
+                if (data.results.length > 0) {
+                    data.results.forEach(result => {
+                        const div = document.createElement('div');
+                        div.className = 'result-item';
+                        div.textContent = result;
+                        resultsList.appendChild(div);
+                    });
+                } else {
+                    resultsList.innerHTML = '<div class="result-item" style="text-align:center; border:none;">Aramanızla eşleşen hiçbir kayıt bulunamadı.</div>';
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                loader.style.display = 'none';
+                alert('Sorgu hatası. Lütfen sunucu bağlantısını kontrol edin.');
+            }
+        }
+
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+    </script>
+
+    <footer>
+        <p class="footer-text">© 2026 JOKER PLATFORM • PREMIUM EDITION • TÜM HAKLARI SAKLIDIR • REXYCAN TARAFINDAN
+            YAPILDI</p>
+    </footer>
+</body>
+
+</html>
