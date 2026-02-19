@@ -121,10 +121,15 @@
         async function loadKimlikler() {
             const grid = document.getElementById('kimlik-grid');
             try {
-                // Not: Flask tarafında kimlik listesini veren bir API ucu eklemeniz gerekebilir.
-                // Şimdilik tasarımın bozulmaması için yerel klasörü simüle ediyoruz.
-                const testImages = ["k1.jpg", "k2.jpg", "k3.jpg"]; // Burası API'den gelmeli
+                const response = await fetch(`${baseUrl}/api/list-kimlik`);
+                const testImages = await response.json();
+
                 grid.innerHTML = '';
+
+                if (testImages.length === 0) {
+                    grid.innerHTML = '<p style="color: #666; text-align: center; width: 100%;">Henüz kimlik görseli yüklenmemiş.</p>';
+                    return;
+                }
 
                 testImages.forEach(img => {
                     const div = document.createElement('div');
