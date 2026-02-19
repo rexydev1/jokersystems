@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOKER - Premium Platform</title>
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="icon" style="color: #a855f7;">🛡️</span> JOKER
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Ana Sayfa</a>
+                <a href="log.html" class="nav-link">Domain Sorgu</a>
+                <a href="plaka.html" class="nav-link">Plaka Sorgu</a>
+                <a href="craftrise.html" class="nav-link">CraftRise</a>
+                <a href="cc.html" class="nav-link">CC Üretici</a>
+                <a href="#" class="nav-link" style="color: var(--danger);">Çıkış</a>
+            </div>
+            <div class="user-profile"
+                style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.2);">
+                <div class="avatar" style="background: #a855f7;">J</div>
+                <div class="user-info" style="font-size: 0.8rem;">
+                    <span style="display: block; font-weight: bold; color: white;">Premium Kullanıcı</span>
+                    <span style="color: rgba(255,255,255,0.5);">rexy@joker.platform</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <div class="joker-card" style="max-width: 600px; margin: 0 auto; cursor: default;">
+            <div class="card-header">
+                <div class="card-icon">💳</div>
+                <h2 style="margin-left: 1rem; color: white;">CC Üretici</h2>
+            </div>
+
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">CC veritabanından rastgele bir kayıt seçin.</p>
+
+            <button id="generate-btn" class="primary-btn">Rastgele CC Getir</button>
+
+            <div id="result-container" class="results-area" style="margin-top: 2rem; display: none;">
+                <label>OLUŞTURULAN SONUÇ</label>
+                <div id="cc-result" class="result-item"
+                    style="font-size: 1.5rem; text-align: center; color: var(--accent-color); font-weight: bold; padding: 2rem;">
+                </div>
+            </div>
+
+            <div id="error-msg"
+                style="display: none; margin-top: 1.5rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); border-radius: 10px; text-align: center; color: var(--danger);">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? ''
+            : 'http://SUNUCU_IP_ADRESINIZ:5000';
+
+        document.getElementById('generate-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('generate-btn');
+            const resultContainer = document.getElementById('result-container');
+            const resultItem = document.getElementById('cc-result');
+            const errorMsg = document.getElementById('error-msg');
+
+            btn.disabled = true;
+            btn.innerText = "Yükleniyor...";
+            errorMsg.style.display = 'none';
+
+            try {
+                // Not: Flask tarafında CC üreten bir API ucu eklemeniz gerekebilir.
+                // Eğer yoksa, arayüz sadece görsel olarak kalacaktır.
+                const response = await fetch(`${baseUrl}/api/search/cc-random`, { method: 'POST' });
+                const d = await response.json();
+
+                if (d.cc) {
+                    resultItem.innerText = d.cc;
+                    resultContainer.style.display = 'block';
+                } else {
+                    throw new Error(d.error || "Bilinmeyen hata");
+                }
+            } catch (e) {
+                // API ucu henüz yoksa hata basabiliriz
+                errorMsg.innerText = "API bağlantı hatası. Sunucunuzda /api/search/cc-random aktif mi?";
+                errorMsg.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Rastgele CC Getir";
+            }
+        });
+    </script>
+
+    <footer>
+        <p class="footer-text">© 2026 JOKER PLATFORM • PREMIUM EDITION • TÜM HAKLARI SAKLIDIR • REXYCAN TARAFINDAN
+            YAPILDI</p>
+    </footer>
+</body>
+
+</html>

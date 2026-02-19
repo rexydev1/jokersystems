@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOKER - Premium Platform</title>
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="icon" style="color: #a855f7;">🛡️</span> JOKER
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Ana Sayfa</a>
+                <a href="log.html" class="nav-link">Domain Sorgu</a>
+                <a href="plaka.html" class="nav-link">Plaka Sorgu</a>
+                <a href="craftrise.html" class="nav-link">CraftRise</a>
+                <a href="cc.html" class="nav-link">CC Üretici</a>
+                <a href="#" class="nav-link" style="color: var(--danger);">Çıkış</a>
+            </div>
+            <div class="user-profile"
+                style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.2);">
+                <div class="avatar" style="background: #a855f7;">J</div>
+                <div class="user-info" style="font-size: 0.8rem;">
+                    <span style="display: block; font-weight: bold; color: white;">Premium Kullanıcı</span>
+                    <span style="color: rgba(255,255,255,0.5);">rexy@joker.platform</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <div class="joker-card" style="max-width: 1200px; margin: 0 auto; cursor: default;">
+            <div class="card-header">
+                <div class="card-icon">🪪</div>
+                <h2 style="margin-left: 1rem; color: white;">Kimlik Arşivi</h2>
+            </div>
+
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">130'dan fazla yüksek kalitede kimlik kartı
+                görseline
+                erişin. Güvenlik nedeniyle indirme ve sağ tık devre dışıdır.</p>
+
+            <div class="kimlik-gallery" oncontextmenu="return false;">
+                <div id="kimlik-grid" class="kimlik-grid">
+                    <!-- API'den gelecek görseller -->
+                    <p style="color: #666; text-align: center; width: 100%;">Görseller API üzerinden yükleniyor...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .kimlik-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .kimlik-item {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .kimlik-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            -webkit-user-drag: none;
+            transition: transform 0.5s ease;
+        }
+
+        .kimlik-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+
+        .kimlik-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .kimlik-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 10;
+        }
+    </style>
+
+    <script>
+        // API Adresini buraya yazın
+        const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? ''
+            : 'http://SUNUCU_IP_ADRESINIZ:5000';
+
+        async function loadKimlikler() {
+            const grid = document.getElementById('kimlik-grid');
+            try {
+                // Not: Flask tarafında kimlik listesini veren bir API ucu eklemeniz gerekebilir.
+                // Şimdilik tasarımın bozulmaması için yerel klasörü simüle ediyoruz.
+                const testImages = ["k1.jpg", "k2.jpg", "k3.jpg"]; // Burası API'den gelmeli
+                grid.innerHTML = '';
+
+                testImages.forEach(img => {
+                    const div = document.createElement('div');
+                    div.className = 'kimlik-item';
+                    div.innerHTML = `
+                        <img src="${baseUrl}/get-kimlik/${img}" alt="Kimlik">
+                        <div class="kimlik-overlay"></div>
+                    `;
+                    grid.appendChild(div);
+                });
+            } catch (e) {
+                grid.innerHTML = '<p style="color: red;">Görseller yüklenemedi. API bağlantısını kontrol edin.</p>';
+            }
+        }
+
+        loadKimlikler();
+
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'p')) e.preventDefault();
+            if (e.key === 'F12') e.preventDefault();
+        });
+    </script>
+
+    <footer>
+        <p class="footer-text">© 2026 JOKER PLATFORM • PREMIUM EDITION • TÜM HAKLARI SAKLIDIR • REXYCAN TARAFINDAN
+            YAPILDI</p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOKER - Premium Platform</title>
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="icon" style="color: #a855f7;">🛡️</span> JOKER
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Ana Sayfa</a>
+                <a href="log.html" class="nav-link">Domain Sorgu</a>
+                <a href="plaka.html" class="nav-link">Plaka Sorgu</a>
+                <a href="craftrise.html" class="nav-link">CraftRise</a>
+                <a href="cc.html" class="nav-link">CC Üretici</a>
+                <a href="#" class="nav-link" style="color: var(--danger);">Çıkış</a>
+            </div>
+            <div class="user-profile"
+                style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.2);">
+                <div class="avatar" style="background: #a855f7;">J</div>
+                <div class="user-info" style="font-size: 0.8rem;">
+                    <span style="display: block; font-weight: bold; color: white;">Premium Kullanıcı</span>
+                    <span style="color: rgba(255,255,255,0.5);">rexy@joker.platform</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <div class="sms-chaos-container" style="max-width: 1200px; margin: 0 auto;">
+            <!-- Üst Başlık -->
+            <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 3rem;">
+                <a href="index.html" class="back-link">← Ana Sayfa</a>
+                <h1
+                    style="color: #ff4d4d; font-size: 2.5rem; text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 10px;">
+                    <span style="background: #ff4d4d; color: #000; padding: 2px 8px; border-radius: 6px;">SMS</span>
+                    CHAOS
+                </h1>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem;">
+                <!-- Sol Panel: Kontrol -->
+                <div class="joker-card" style="border-color: rgba(255, 77, 77, 0.3); padding: 2.5rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3
+                            style="margin: 0; color: #666; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">
+                            ATTACK ENGINE</h3>
+                        <span id="status-badge"
+                            style="background: rgba(255,255,255,0.05); color: #888; padding: 4px 10px; border-radius: 4px; font-size: 0.6rem;">IDLE</span>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" id="phone-number" placeholder="5551234567"
+                            style="width: 100%; background: #000; border: 1px solid #1a1a1a; padding: 1.5rem; border-radius: 12px; color: white; font-size: 1.2rem; margin-bottom: 1.5rem;">
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <button onclick="startAttack()" id="launch-btn" class="attack-btn">LAUNCH</button>
+                        <button onclick="stopAttack()" id="stop-btn" class="attack-btn"
+                            style="background: #333; display: none;">STOP</button>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem;">
+                        <div class="stat-box">
+                            <span class="stat-title">Total Sent</span>
+                            <span id="total-sent" class="stat-num">0</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-title">Success Rate</span>
+                            <span id="success-rate" class="stat-num">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sağ Panel: Loglar -->
+                <div class="joker-card"
+                    style="border-color: rgba(255, 77, 77, 0.1); background: rgba(0,0,0,0.5); position: relative; min-height: 480px;">
+                    <h3
+                        style="margin: 1.5rem; color: #666; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">
+                        LIVE ATTACK LOGS</h3>
+
+                    <div id="log-container"
+                        style="padding: 0 1.5rem; height: 350px; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #555;">
+                        <div id="idle-status"
+                            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                            <span
+                                style="color: #ff4d4d; font-size: 2.5rem; display: block; margin-bottom: 15px;">⚡</span>
+                            <p style="color: #444; font-weight: bold;">System Armed – Ready to Launch</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .back-link {
+            position: absolute;
+            left: 2rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+
+        .attack-btn {
+            flex: 1;
+            padding: 1.2rem;
+            background: #ff4d4d;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 900;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .attack-btn:hover {
+            background: #e60000;
+            box-shadow: 0 0 30px rgba(255, 77, 77, 0.4);
+            transform: scale(1.02);
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .stat-title {
+            display: block;
+            font-size: 0.6rem;
+            color: #555;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-num {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <script>
+        // API Adresi
+        const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? ''
+            : 'http://SUNUCU_IP_ADRESINIZ:5000';
+
+        let attackActive = false;
+        let sentCount = 0;
+        let successCount = 0;
+        let services = [];
+
+        async function startAttack() {
+            const phone = document.getElementById('phone-number').value;
+            if (!phone || phone.length !== 10) {
+                alert("Lütfen başında 0 olmadan 10 haneli numara girin!");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${baseUrl}/api/sms-services`);
+                services = await res.json();
+                if (services.error) {
+                    alert("Hata: " + services.error);
+                    return;
+                }
+            } catch (e) {
+                alert("Sunucuya bağlanılamadı. API açık mı?");
+                return;
+            }
+
+            attackActive = true;
+            sentCount = 0;
+            successCount = 0;
+
+            document.getElementById('launch-btn').style.display = 'none';
+            document.getElementById('stop-btn').style.display = 'block';
+            document.getElementById('idle-status').style.display = 'none';
+            document.getElementById('status-badge').innerText = 'RUNNING';
+            document.getElementById('status-badge').style.color = '#ff4d4d';
+            document.getElementById('log-container').innerHTML = '';
+
+            addLog(`System initialized...`);
+            addLog(`Target locked: +90 ${phone}`);
+
+            runAttackCycle(phone);
+        }
+
+        function stopAttack() {
+            attackActive = false;
+            document.getElementById('stop-btn').innerText = "STOPPING...";
+        }
+
+        async function runAttackCycle(phone) {
+            while (attackActive) {
+                for (const service of services) {
+                    if (!attackActive) break;
+
+                    try {
+                        const response = await fetch(`${baseUrl}/api/sms-send`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ phone: phone, service: service })
+                        });
+                        const result = await response.json();
+
+                        sentCount++;
+                        if (result.status === "success") {
+                            successCount++;
+                            addLog(`<span style="color: #10b981;">Sent! ✅ (${service})</span>`);
+                        } else {
+                            addLog(`<span style="color: #ef4444;">Failed! ❌ (${service})</span>`);
+                        }
+
+                        updateStats();
+                        await new Promise(r => setTimeout(r, 100));
+                    } catch (e) {
+                        addLog(`<span style="color: #ef4444;">[ERR] Connection error</span>`);
+                    }
+                }
+            }
+
+            document.getElementById('launch-btn').style.display = 'block';
+            document.getElementById('stop-btn').style.display = 'none';
+            document.getElementById('status-badge').innerText = 'IDLE';
+            document.getElementById('status-badge').style.color = '#888';
+        }
+
+        function updateStats() {
+            document.getElementById('total-sent').innerText = sentCount;
+            const rate = sentCount > 0 ? Math.round((successCount / sentCount) * 100) : 0;
+            document.getElementById('success-rate').innerText = rate + "%";
+        }
+
+        function addLog(msg) {
+            const time = new Date().toLocaleTimeString();
+            const div = document.createElement('div');
+            div.className = 'log-entry';
+            div.innerHTML = `<span style="color: #333;">[${time}]</span> ${msg}`;
+            const container = document.getElementById('log-container');
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+    </script>
+
+    <footer>
+        <p class="footer-text">© 2026 JOKER PLATFORM • PREMIUM EDITION • TÜM HAKLARI SAKLIDIR • REXYCAN TARAFINDAN
+            YAPILDI</p>
+    </footer>
+</body>
+
+</html>

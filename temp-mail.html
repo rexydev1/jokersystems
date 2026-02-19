@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOKER - Premium Platform</title>
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="icon" style="color: #a855f7;">🛡️</span> JOKER
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Ana Sayfa</a>
+                <a href="log.html" class="nav-link">Domain Sorgu</a>
+                <a href="plaka.html" class="nav-link">Plaka Sorgu</a>
+                <a href="craftrise.html" class="nav-link">CraftRise</a>
+                <a href="cc.html" class="nav-link">CC Üretici</a>
+                <a href="#" class="nav-link" style="color: var(--danger);">Çıkış</a>
+            </div>
+            <div class="user-profile"
+                style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.2);">
+                <div class="avatar" style="background: #a855f7;">J</div>
+                <div class="user-info" style="font-size: 0.8rem;">
+                    <span style="display: block; font-weight: bold; color: white;">Premium Kullanıcı</span>
+                    <span style="color: rgba(255,255,255,0.5);">rexy@joker.platform</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <div class="temp-mail-container" style="max-width: 1000px; margin: 0 auto; padding: 2rem;">
+            <!-- Üst Başlık ve Geri Dönüş -->
+            <div
+                style="display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 3rem;">
+                <a href="index.html" class="back-btn">← Back to Dashboard</a>
+                <h1
+                    style="color: #00d2ff; font-size: 2.2rem; display: flex; align-items: center; gap: 15px; margin: 0;">
+                    <span style="font-size: 2.5rem;">✉</span> Temp Mail
+                </h1>
+            </div>
+
+            <!-- Mail Oluşturma Alanı -->
+            <div class="joker-card main-card"
+                style="border-color: rgba(0, 210, 255, 0.2); text-align: center; padding: 3rem 2rem;">
+                <p style="color: #888; margin-bottom: 1.5rem; font-size: 0.9rem;">Your temporary email address
+                    (multi-API
+                    powered):</p>
+
+                <div class="email-display-box">
+                    <span id="current-email" class="email-text">Loading...</span>
+                </div>
+
+                <div class="button-grid">
+                    <button onclick="generateNewEmail()" class="action-btn cyan-btn">Generate New Email</button>
+                    <button onclick="refreshInbox()" class="action-btn cyan-btn">Refresh Inbox</button>
+                    <button onclick="copyEmail()" class="action-btn cyan-btn">Copy Email</button>
+                </div>
+            </div>
+
+            <!-- Inbox Alanı -->
+            <div class="joker-card inbox-card" style="border-color: rgba(255, 255, 255, 0.05); margin-top: 2rem;">
+                <h3
+                    style="color: #00d2ff; text-align: center; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 2px;">
+                    Inbox</h3>
+
+                <div id="inbox-container" class="inbox-list">
+                    <div class="empty-inbox">
+                        <p style="color: #444;">Inbox is empty (Awaiting messages...)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .back-btn {
+            position: absolute;
+            left: 0;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .main-card {
+            background: rgba(0, 21, 36, 0.4) !important;
+        }
+
+        .email-display-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed rgba(0, 210, 255, 0.3);
+            padding: 1.2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .email-text {
+            color: #00d2ff;
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .action-btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .cyan-btn {
+            background: #00d2ff;
+            color: #000;
+        }
+
+        .mail-item {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+
+        .mail-sender {
+            color: #00d2ff;
+            font-weight: bold;
+        }
+
+        .mail-subject {
+            color: #eee;
+            margin-top: 5px;
+        }
+
+        .mail-body {
+            color: #aaa;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: none;
+        }
+    </style>
+
+    <script>
+        let currentEmail = "";
+        let currentLogin = "";
+        let currentDomain = "";
+
+        function generateNewEmail() {
+            const domains = ["1secmail.com", "1secmail.org", "1secmail.net", "wwjmp.com", "esiix.com"];
+            currentDomain = domains[Math.floor(Math.random() * domains.length)];
+            currentLogin = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 6);
+            currentEmail = `${currentLogin}@${currentDomain}`;
+            document.getElementById("current-email").innerText = currentEmail;
+            document.getElementById("inbox-container").innerHTML = '<div class="empty-inbox"><p style="color: #444;">Inbox is empty</p></div>';
+        }
+
+        async function refreshInbox() {
+            if (!currentLogin) return;
+            const url = `https://www.1secmail.com/api/v1/?action=getMessages&login=${currentLogin}&domain=${currentDomain}`;
+            try {
+                const response = await fetch(url);
+                const emails = await response.json();
+                const container = document.getElementById("inbox-container");
+                if (emails.length === 0) return;
+                container.innerHTML = "";
+                emails.forEach(email => {
+                    const div = document.createElement("div");
+                    div.className = "mail-item";
+                    div.innerHTML = `<div class="mail-sender">${email.from}</div><div class="mail-subject">${email.subject}</div><div id="body-${email.id}" class="mail-body">Loading...</div>`;
+                    div.onclick = () => toggleMail(email.id);
+                    container.appendChild(div);
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        async function toggleMail(id) {
+            const bodyDiv = document.getElementById(`body-${id}`);
+            bodyDiv.style.display = bodyDiv.style.display === "block" ? "none" : "block";
+            if (bodyDiv.innerHTML === "Loading...") {
+                const url = `https://www.1secmail.com/api/v1/?action=readMessage&login=${currentLogin}&domain=${currentDomain}&id=${id}`;
+                const res = await fetch(url);
+                const data = await res.json();
+                bodyDiv.innerHTML = data.htmlBody || data.body;
+            }
+        }
+
+        function copyEmail() {
+            navigator.clipboard.writeText(currentEmail);
+            alert("Email copied!");
+        }
+
+        generateNewEmail();
+    </script>
+
+    <footer>
+        <p class="footer-text">© 2026 JOKER PLATFORM • PREMIUM EDITION • TÜM HAKLARI SAKLIDIR • REXYCAN TARAFINDAN
+            YAPILDI</p>
+    </footer>
+</body>
+
+</html>

@@ -218,7 +218,6 @@ def kimlik_arsivi():
     return render_template('kimlik_arsivi.html', kimlikler=kimlikler)
 
 @app.route('/get-kimlik/<filename>')
-@login_required
 def get_kimlik(filename):
     return send_from_directory('kimlik', filename)
 
@@ -248,7 +247,6 @@ def temp_mail():
     return render_template('temp_mail.html')
 
 @app.route('/api/sms-services')
-@login_required
 def get_sms_services():
     if not SendSms:
         return jsonify({"error": "SMS module not found"}), 500
@@ -261,7 +259,6 @@ def get_sms_services():
     return jsonify(services)
 
 @app.route('/api/sms-send', methods=['POST'])
-@login_required
 def send_sms_api():
     data = request.json
     phone = data.get('phone')
@@ -283,7 +280,6 @@ def send_sms_api():
         return jsonify({"status": "failed", "service": service, "error": str(e)})
 
 @app.route('/api/tools/ip-lookup', methods=['POST'])
-@login_required
 def ip_lookup():
     ip = request.json.get('ip')
     if not ip:
@@ -324,6 +320,30 @@ def cc_gen():
             error = "'cc' folder not found."
 
     return render_template('cc.html', cc=cc, error=error)
+
+@app.route('/api/search/cc-random', methods=['POST'])
+def api_cc_random():
+    folder = 'cc'
+    if os.path.exists(folder):
+        files = [f for f in os.listdir(folder) if f.endswith('.txt')]
+        if files:
+            try:
+                fpath = os.path.join(folder, random.choice(files))
+                with open(fpath, "r", encoding="utf-8", errors="ignore") as f:
+                    lines = [l.strip() for l in f if l.strip()]
+                if lines:
+                    return jsonify({"cc": random.choice(lines)})
+            except Exception as e:
+                return jsonify({"error": str(e)}), 500
+    return jsonify({"error": "No records found"}), 404
+
+@app.route('/api/list-kimlik')
+def api_list_kimlik():
+    kimlik_dir = 'kimlik'
+    if os.path.exists(kimlik_dir):
+        files = [f for f in os.listdir(kimlik_dir) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
+        return jsonify(files)
+    return jsonify([])
 
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
